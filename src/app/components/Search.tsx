@@ -31,6 +31,7 @@ export function Search() {
 
   const roleQueries = {
     empleado: [
+      "¿Cuáles son las últimas dudas de clientes recibidas por WhatsApp?",
       "¿Cuál es el proceso para pedir vacaciones y dónde lleno el formato?",
       "¿Dónde está la política de viáticos y qué monto máximo puedo reembolsar?",
       "¿Cómo me conecto a la VPN y a quién le levanto ticket si falla?",
@@ -45,6 +46,7 @@ export function Search() {
       "¿Qué significa este error [pegar error] y cómo lo resolvieron antes?",
     ],
     manager: [
+      "Consultas de ventas por WhatsApp hoy",
       "¿Cuáles son los OKRs actuales de mi equipo y cuándo se actualizan?",
       "¿Cuál es el estado de los proyectos críticos y los próximos hitos?",
       "¿Qué acuerdos se tomaron en la última reunión de stakeholders de [Proyecto X]?",

@@ -97,8 +97,9 @@ export const dataSources: DataSource[] = [
     name: "WhatsApp Business",
     type: "Comunicación con Clientes",
     icon: "MessageCircle",
-    connected: false,
+    connected: true,
     description: "Conversaciones con clientes y mensajes de soporte",
+    lastSync: "hace 1 minuto",
   },
 ];
 
@@ -361,12 +362,54 @@ export const mockSearchResults: { [key: string]: SearchResult[] } = {
       relevance: 88,
     },
   ],
+  "soporte whatsapp": [
+    {
+      id: "wa1",
+      title: "Ticket #8824 - Error en Facturación (WhatsApp)",
+      content:
+        "Cliente: 'Hola, mi factura CFDI 4.0 no llegó a mi correo'. Soporte: 'Hola, verificamos tu RFC y código postal. Había un error en el código postal. Ya se reenvió la factura corregida'.",
+      source: "WhatsApp Business",
+      sourceIcon: "MessageCircle",
+      author: "Agente: Carlos Ruiz",
+      timestamp: "hace 45 minutos",
+      relevance: 98,
+    },
+    {
+      id: "wa2",
+      title: "Consulta Comercial - Plan Enterprise (WhatsApp)",
+      content:
+        "Prospecto: '¿Tienen integración con SAP?'. Ventas: 'Sí, contamos con un conector nativo para SAP S/4HANA. ¿Te gustaría agendar una demo técnica hoy?'.",
+      source: "WhatsApp Business",
+      sourceIcon: "MessageCircle",
+      author: "Ventas: Ana García",
+      timestamp: "Ayer",
+      relevance: 92,
+    },
+    {
+      id: "wa3",
+      title: "Feedback de Producto - Interfaz (WhatsApp)",
+      content:
+        "Cliente: 'Me encanta la nueva búsqueda, pero sería genial tener filtros por fecha'. Soporte: '¡Gracias por el feedback! Lo pasaremos al equipo de producto. Ya está en el roadmap de Q3'.",
+      source: "WhatsApp Business",
+      sourceIcon: "MessageCircle",
+      author: "Soporte ConnectAI",
+      timestamp: "hace 2 días",
+      relevance: 85,
+    },
+  ],
 };
 
 export function searchCompanyKnowledge(query: string): SearchResult[] {
   const lowercaseQuery = query.toLowerCase();
 
   // Specific keyword mapping for the demo
+  if (lowercaseQuery.includes("whatsapp") || lowercaseQuery.includes("cliente") || lowercaseQuery.includes("soporte")) {
+    return [
+      ...mockSearchResults["soporte whatsapp"],
+      ...mockSearchResults["comentarios clientes"]
+    ];
+  }
+
   if (lowercaseQuery.includes("vacaciones") || lowercaseQuery.includes("formato")) {
     return [
       {
