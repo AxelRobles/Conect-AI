@@ -5,21 +5,26 @@ import { searchCompanyKnowledge } from "../data/mockData";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { useState, useEffect } from "react";
+import { useHistory } from "../hooks/useHistory";
 
 export function ResultsPage() {
     const [searchParams, setSearchParams] = useSearchParams();
     const queryParam = searchParams.get("q") || "";
     const [inputValue, setInputValue] = useState(queryParam);
     const results = searchCompanyKnowledge(queryParam);
+    const { addHistoryItem } = useHistory();
 
     useEffect(() => {
         setInputValue(queryParam);
+        if (queryParam.trim()) {
+            addHistoryItem(queryParam.trim());
+        }
     }, [queryParam]);
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
         if (inputValue.trim()) {
-            setSearchParams({ q: inputValue });
+            setSearchParams({ q: inputValue.trim() });
         }
     };
 

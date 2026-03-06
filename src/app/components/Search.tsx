@@ -10,23 +10,43 @@ import {
   User,
   ShieldCheck,
   Briefcase,
-  Zap
+  Zap,
+  Clock,
+  ArrowRight
 } from "lucide-react";
 import { useNavigate } from "react-router";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "./ui/tabs";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+  SheetDescription
+} from "./ui/sheet";
+import { useHistory } from "../hooks/useHistory";
+import { formatDistanceToNow } from "date-fns";
+import { es } from "date-fns/locale";
 
 export function Search() {
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
+  const { history: searchHistory, addHistoryItem } = useHistory();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (query.trim()) {
+      addHistoryItem(query);
       navigate(`/search-results?q=${encodeURIComponent(query)}`);
     }
+  };
+
+  const navigateToQuery = (q: string) => {
+    addHistoryItem(q);
+    navigate(`/search-results?q=${encodeURIComponent(q)}`);
   };
 
   const roleQueries = {
@@ -159,10 +179,53 @@ export function Search() {
               <Globe className="w-4 h-4" />
               <span>Contexto: México (CDMX)</span>
             </div>
-            <div className="flex items-center gap-1.5 cursor-pointer hover:text-indigo-600 transition-colors">
-              <History className="w-4 h-4" />
-              <span>Ver historial</span>
-            </div>
+
+            <Sheet>
+              <SheetTrigger asChild>
+                <div className="flex items-center gap-1.5 cursor-pointer hover:text-indigo-600 transition-colors">
+                  <History className="w-4 h-4" />
+                  <span>Ver historial</span>
+                </div>
+              </SheetTrigger>
+              <SheetContent side="right">
+                <SheetHeader>
+                  <SheetTitle className="flex items-center gap-2">
+                    <History className="w-5 h-5 text-indigo-600" />
+                    Historial de Búsqueda
+                  </SheetTitle>
+                  <SheetDescription>
+                    Tus búsquedas recientes en este demo.
+                  </SheetDescription>
+                </SheetHeader>
+                <div className="mt-8 space-y-4 overflow-y-auto max-h-[calc(100vh-200px)] px-1">
+                  {searchHistory.length === 0 ? (
+                    <div className="text-center py-10">
+                      <Clock className="w-10 h-10 text-gray-200 mx-auto mb-3" />
+                      <p className="text-sm text-gray-500">No hay búsquedas recientes.</p>
+                    </div>
+                  ) : (
+                    searchHistory.map((item, idx) => (
+                      <button
+                        key={`${item.query}-${idx}`}
+                        className="w-full text-left p-4 rounded-xl border border-gray-100 hover:border-indigo-200 hover:bg-indigo-50/30 transition-all group flex flex-col gap-1"
+                        onClick={() => navigateToQuery(item.query)}
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="font-medium text-gray-900 group-hover:text-indigo-700 transition-colors truncate pr-4">
+                            {item.query}
+                          </span>
+                          <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-indigo-400 group-hover:translate-x-1 transition-all shrink-0" />
+                        </div>
+                        <span className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">
+                          Hace {formatDistanceToNow(new Date(item.timestamp), { locale: es })}
+                        </span>
+                      </button>
+                    ))
+                  )}
+                </div>
+              </SheetContent>
+            </Sheet>
+
             <div className="flex items-center gap-1.5 cursor-pointer hover:text-indigo-600 transition-colors">
               <Sparkles className="w-4 h-4" />
               <span>Personalizar respuestas IA</span>
@@ -205,7 +268,7 @@ export function Search() {
                   {roleQueries[role].map((q) => (
                     <button
                       key={q}
-                      onClick={() => navigate(`/search-results?q=${encodeURIComponent(q)}`)}
+                      onClick={() => navigateToQuery(q)}
                       className="flex items-center justify-between p-4 bg-white border border-gray-100 rounded-2xl hover:border-indigo-200 hover:bg-indigo-50/30 transition-all text-left group animate-in fade-in slide-in-from-bottom-2 duration-300"
                     >
                       <div className="flex items-center gap-3">
