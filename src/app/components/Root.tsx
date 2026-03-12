@@ -109,7 +109,7 @@ export function Root() {
               history.slice(0, 15).map((item, idx) => (
                 <button
                   key={`${item.query}-${idx}`}
-                  onClick={() => navigate(`/search-results?q=${encodeURIComponent(item.query)}`)}
+                  onClick={() => navigate(`/chat?q=${encodeURIComponent(item.query)}`)}
                   className="w-full flex items-center gap-3 px-4 py-2 rounded-lg text-sm text-gray-600 hover:bg-indigo-50/50 hover:text-indigo-700 transition-all text-left group"
                 >
                   <MessageSquare className="w-4 h-4 text-gray-300 group-hover:text-indigo-400 shrink-0" />

@@ -27,13 +27,13 @@ export function Search() {
     e.preventDefault();
     if (query.trim()) {
       addHistoryItem(query);
-      navigate(`/search-results?q=${encodeURIComponent(query)}`);
+      navigate(`/chat?q=${encodeURIComponent(query)}`);
     }
   };
 
   const navigateToQuery = (q: string) => {
     addHistoryItem(q);
-    navigate(`/search-results?q=${encodeURIComponent(q)}`);
+    navigate(`/chat?q=${encodeURIComponent(q)}`);
   };
 
   const roleQueries = {
